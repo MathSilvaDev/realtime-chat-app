@@ -53,23 +53,17 @@ class AuthServiceTest {
     @InjectMocks
     private AuthService authService;
 
-    private final String email = "test@test.test";
-
     @Nested
     class Register{
 
         @Test
         void shouldRegisterWithSuccess(){
             RegisterRequest request = new RegisterRequest(
-                    "test@test.test",
                     "username",
                     "rawPassword"
             );
 
             Role role = new Role(RoleName.BASIC);
-
-            when(userRepository.existsByEmail(request.email()))
-                    .thenReturn(false);
 
             when(roleRepository.findByName(role.getName()))
                     .thenReturn(Optional.of(role));
@@ -80,11 +74,9 @@ class AuthServiceTest {
             authService.register(request);
 
             verify(userRepository).save(argThat(user ->
-                    user.getEmail().equals(request.email()) &&
                     user.getUsername().equals(request.username()) &&
                     user.getPassword().equals("hashedPassword")
             ));
-
 
         }
     }
@@ -95,18 +87,17 @@ class AuthServiceTest {
         @Test
         void shouldLoginWithSuccess(){
             LoginRequest request = new LoginRequest(
-                    email,
+                    "username",
                     "hashPassword"
             );
 
             User user = new User(
-                    email,
                     "username",
                     "hashPassword"
             );
 
             UserDetails userDetails = org.springframework.security.core.userdetails.User
-                    .withUsername(user.getEmail())
+                    .withUsername(user.getUsername())
                     .password(user.getPassword())
                     .authorities("ROLE_BASIC")
                     .build();
@@ -117,7 +108,7 @@ class AuthServiceTest {
             when(authenticationManager.authenticate(any()))
                     .thenReturn(authentication);
 
-            when(userRepository.findByEmail(user.getEmail()))
+            when(userRepository.findByUsername(user.getUsername()))
                     .thenReturn(Optional.of(user));
 
             when(jwtService.generateToken(user))
@@ -132,7 +123,7 @@ class AuthServiceTest {
         @Test
         void shouldThrowWhenAuthenticationFails(){
             LoginRequest request = new LoginRequest(
-                    email,
+                    "username",
                     "wrongPassword"
             );
 

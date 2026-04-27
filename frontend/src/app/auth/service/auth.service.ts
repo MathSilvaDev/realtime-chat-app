@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LoginResponseJwt } from '../models/login-response-jwt';
 import { Router } from '@angular/router';
@@ -16,15 +16,15 @@ export class AuthService {
 
   private readonly API_URL = "/api/auth";
 
-  register(username: string, email: string, password: string): Observable<void>{
+  register(username: string, password: string): Observable<void>{
     return this.http.post<void>(`${this.API_URL}/register`,{
-      username, email, password
+      username, password
     });
   }
 
-  login(email: string, password: string): Observable<LoginResponseJwt>{
+  login(username: string, password: string): Observable<LoginResponseJwt>{
     return this.http.post<LoginResponseJwt>(`${this.API_URL}/login`,{
-      email, password 
+      username, password 
     })
   }
 

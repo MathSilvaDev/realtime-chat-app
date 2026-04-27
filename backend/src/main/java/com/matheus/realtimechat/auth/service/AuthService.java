@@ -11,7 +11,6 @@ import com.matheus.realtimechat.domain.user.repository.UserRepository;
 import com.matheus.realtimechat.infrastructure.security.jwt.JwtService;
 import com.matheus.realtimechat.infrastructure.security.jwt.dto.TokenData;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,7 +18,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -34,38 +32,33 @@ public class AuthService {
     @Transactional
     public void register(RegisterRequest request){
 
-        if(userRepository.existsByEmail(request.email())){
-            throw new ResponseStatusException(HttpStatus.CONFLICT);
-        }
-
         Role roleBasic = roleRepository.findByName(RoleName.BASIC).
                 orElseThrow(() -> new IllegalStateException("Default role BASIC not found"));
 
         String hashPassword = passwordEncoder.encode(request.password());
 
-        User user = new User(
-                request.email(),
+        User newUser = new User(
                 request.username(),
                 hashPassword
         );
 
-        user.addRole(roleBasic);
+        newUser.addRole(roleBasic);
 
-        userRepository.save(user);
+        userRepository.save(newUser);
     }
 
     public LoginResponse login(LoginRequest request){
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.email(),
+                        request.username(),
                         request.password()
                 )
         );
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        User user = userRepository.findByEmail(userDetails.getUsername())
+        User user = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow();
 
         TokenData tokenData = jwtService.generateToken(user);

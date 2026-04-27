@@ -17,7 +17,6 @@ export class Register {
   ){}
 
   username: string = "";
-  email: string = "";
   password: string = "";
 
   ngOnInit(){
@@ -26,10 +25,9 @@ export class Register {
 
   register(){
     const username = this.replaceInput(this.username);
-    const email = this.replaceInput(this.email);
     const password = this.replaceInput(this.password);
 
-    this.authService.register(username, email, password).subscribe({
+    this.authService.register(username, password).subscribe({
       next: () => {
         this.router.navigate(["/login"]);
       },

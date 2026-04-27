@@ -23,8 +23,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+//    @Column(nullable = false, unique = true)
+//    private String handleName;
 
     @Column(nullable = false, length = ValidationConstants.USERNAME_MAX_LENGTH)
     private String username;
@@ -44,8 +44,7 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
-    public User(String email, String username, String password){
-        this.email = email;
+    public User(String username, String password){
         this.username = username;
         this.password = password;
     }

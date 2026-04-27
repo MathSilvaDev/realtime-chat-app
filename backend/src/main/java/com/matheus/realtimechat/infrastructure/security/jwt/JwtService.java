@@ -28,7 +28,7 @@ public class JwtService {
                 .issuer("BACKEND_JAVA(MatheusSilva)")
                 .issuedAt(now)
                 .expiresAt(now.plusSeconds(EXPIRES_AT))
-                .subject(user.getEmail())
+                .subject(user.getUsername())
                 .claim("userId", user.getId().toString())
                 .claim("roles",
                         user.getRoles().stream()

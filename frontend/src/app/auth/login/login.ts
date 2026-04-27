@@ -17,7 +17,7 @@ export class Login {
     private router: Router
   ){}
 
-  email: string = "";
+  username: string = "";
   password: string = "";
 
   ngOnInit(){
@@ -25,10 +25,10 @@ export class Login {
   }
 
   login(){
-    const email = this.replaceInput(this.email);
+    const username = this.replaceInput(this.username);
     const password = this.replaceInput(this.password);
 
-    this.authService.login(email, password).subscribe({
+    this.authService.login(username, password).subscribe({
       next: (jwt) => {
         this.authService.setToken(jwt.token)
         // this.router.navigate(["home"]);
