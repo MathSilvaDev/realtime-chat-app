@@ -21,7 +21,7 @@ export class Login {
   password: string = "";
 
   ngOnInit(){
-    this.authService.clearLocalStorage();
+    this.authService.removeToken();
   }
 
   login(){

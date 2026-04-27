@@ -20,7 +20,7 @@ export class Register {
   password: string = "";
 
   ngOnInit(){
-    this.authService.clearLocalStorage();
+    this.authService.removeToken();
   }
 
   register(){

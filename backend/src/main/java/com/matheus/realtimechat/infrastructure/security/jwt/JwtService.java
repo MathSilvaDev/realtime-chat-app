@@ -30,7 +30,6 @@ public class JwtService {
                 .expiresAt(now.plusSeconds(EXPIRES_AT))
                 .subject(user.getUsername())
                 .claim("userId", user.getId().toString())
-                .claim("handleName", user.getHandleName())
                 .claim("roles",
                         user.getRoles().stream()
                                 .map(role -> "ROLE_" + role.getName())

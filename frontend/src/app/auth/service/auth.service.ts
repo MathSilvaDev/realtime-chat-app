@@ -32,21 +32,12 @@ export class AuthService {
     localStorage.setItem("token", token);
   }
 
-  setUsername(username: string){
-    localStorage.setItem("username", username);
-  }
-
-  setInfoLogin(username: string, token: string){
-    this.setUsername(username);
-    this.setToken(token);
-  }
-
-  clearLocalStorage(){
-    localStorage.clear();
+  removeToken(){
+    localStorage.removeItem('token');
   }
 
   logout(){
-    this.clearLocalStorage();
+    localStorage.clear()
     this.router.navigate(["/login"])
   }
 }
