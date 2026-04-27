@@ -23,8 +23,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-//    @Column(nullable = false, unique = true)
-//    private String handleName;
+    @Column(nullable = false, unique = true)
+    private String handleName;
 
     @Column(nullable = false, length = ValidationConstants.USERNAME_MAX_LENGTH)
     private String username;
@@ -47,9 +47,15 @@ public class User {
     public User(String username, String password){
         this.username = username;
         this.password = password;
+        handleName = generateHandleName();
     }
 
     public void addRole(Role role){
         roles.add(role);
+    }
+
+    private String generateHandleName(){
+        return username + "#" +
+                UUID.randomUUID().toString().substring(0, 8);
     }
 }
