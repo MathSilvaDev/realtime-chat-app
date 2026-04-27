@@ -1,4 +1,4 @@
-package com.matheus.realtimechat.validation;
+package com.matheus.realtimechat.common.validation;
 
 public final class ValidationConstants {
 
