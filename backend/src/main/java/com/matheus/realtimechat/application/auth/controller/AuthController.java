@@ -1,9 +1,9 @@
-package com.matheus.realtimechat.auth.controller;
+package com.matheus.realtimechat.application.auth.controller;
 
-import com.matheus.realtimechat.auth.dto.request.LoginRequest;
-import com.matheus.realtimechat.auth.dto.request.RegisterRequest;
-import com.matheus.realtimechat.auth.dto.response.LoginResponse;
-import com.matheus.realtimechat.auth.service.AuthService;
+import com.matheus.realtimechat.application.auth.dto.request.LoginRequest;
+import com.matheus.realtimechat.application.auth.dto.request.RegisterRequest;
+import com.matheus.realtimechat.application.auth.dto.response.LoginResponse;
+import com.matheus.realtimechat.application.auth.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

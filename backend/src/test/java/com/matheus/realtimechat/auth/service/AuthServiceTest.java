@@ -1,8 +1,9 @@
 package com.matheus.realtimechat.auth.service;
 
-import com.matheus.realtimechat.auth.dto.request.LoginRequest;
-import com.matheus.realtimechat.auth.dto.request.RegisterRequest;
-import com.matheus.realtimechat.auth.dto.response.LoginResponse;
+import com.matheus.realtimechat.application.auth.dto.request.LoginRequest;
+import com.matheus.realtimechat.application.auth.dto.request.RegisterRequest;
+import com.matheus.realtimechat.application.auth.dto.response.LoginResponse;
+import com.matheus.realtimechat.application.auth.service.AuthService;
 import com.matheus.realtimechat.domain.role.entity.Role;
 import com.matheus.realtimechat.domain.role.enums.RoleName;
 import com.matheus.realtimechat.domain.role.repository.RoleRepository;

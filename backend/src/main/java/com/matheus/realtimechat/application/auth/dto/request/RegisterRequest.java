@@ -1,4 +1,4 @@
-package com.matheus.realtimechat.auth.dto.request;
+package com.matheus.realtimechat.application.auth.dto.request;
 
 import com.matheus.realtimechat.validation.ValidationConstants;
 import jakarta.validation.constraints.NotBlank;
