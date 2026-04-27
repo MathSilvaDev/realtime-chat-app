@@ -1,0 +1,27 @@
+<div class="container">
+  <div class="centralize">
+    <form (ngSubmit)="login()">
+      <div class="inputs">
+        <h1>Access Account</h1>
+
+        <label>
+          Email:
+          <input type="text" name="email" [(ngModel)]="email" placeholder="example@email.com"/>
+        </label>
+
+        <label>
+          Password:
+          <input type="password" name="password" [(ngModel)]="password" placeholder="********"/>
+        </label>
+      </div>
+
+      <button type="submit">Sign In</button>
+
+    </form>
+
+    <p class="p-link">Don't have an account yet? 
+      <a routerLink="/register">Sign up</a>
+    </p>
+
+  </div>
+</div>

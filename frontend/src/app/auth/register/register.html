@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="centralize">
+    <form (ngSubmit)="register()">
+      <div class="inputs">
+        <h1>Register Account</h1>
+
+        <label>
+          Name:
+          <input type="text" name="username" [(ngModel)]="username" placeholder="Your Name"/>
+        </label>
+
+        <label>
+          Email:
+          <input type="text" name="email" [(ngModel)]="email" placeholder="example@email.com"/>
+        </label>
+
+        <label>
+          Password:
+          <input type="password" name="password" [(ngModel)]="password" placeholder="********"/>
+        </label>
+      </div>
+
+      <button type="submit">Register</button>
+
+    </form>
+
+    <p class="p-link">Already have an account? 
+      <a routerLink="/login">Sign in</a>
+    </p>
+
+  </div>
+</div>
