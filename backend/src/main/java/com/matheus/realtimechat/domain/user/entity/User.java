@@ -1,8 +1,8 @@
 package com.matheus.realtimechat.domain.user.entity;
 
-import com.matheus.realtimechat.domain.contact.entity.Contact;
 import com.matheus.realtimechat.domain.role.entity.Role;
 import com.matheus.realtimechat.common.validation.ValidationConstants;
+import com.matheus.realtimechat.domain.usercontact.entity.UserContact;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -45,13 +45,8 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "tb_user_contact",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "contact_id")
-    )
-    private Set<Contact> contacts = new HashSet<>();
+    @OneToMany(mappedBy = "user")
+    private Set<UserContact> contacts = new HashSet<>();
 
     public User(String username, String password){
         this.username = username;
@@ -61,10 +56,6 @@ public class User {
 
     public void addRole(Role role){
         roles.add(role);
-    }
-
-    public void addContact(Contact contact){
-        contacts.add(contact);
     }
 
     private String generateHandleName(){
