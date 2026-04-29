@@ -1,15 +1,16 @@
 package com.matheus.realtimechat.application.contact.controller;
 
 import com.matheus.realtimechat.application.contact.dto.request.ContactResponse;
+import com.matheus.realtimechat.application.contact.dto.response.ContactRequest;
 import com.matheus.realtimechat.application.contact.service.ContactService;
 import com.matheus.realtimechat.common.security.AuthUtils;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -26,5 +27,16 @@ public class ContactController {
         UUID userId = AuthUtils.getUserId(jwt);
 
         return ResponseEntity.ok(contactService.findContacts(userId));
+    }
+
+    @PostMapping
+    public ResponseEntity<ContactResponse> addContact(
+            @AuthenticationPrincipal Jwt jwt, @Valid @RequestBody ContactRequest request){
+
+        UUID userId = AuthUtils.getUserId(jwt);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(contactService.addContact(userId, request));
     }
 }

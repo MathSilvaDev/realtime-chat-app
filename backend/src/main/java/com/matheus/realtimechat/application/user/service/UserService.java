@@ -26,8 +26,8 @@ public class UserService {
 
     private UserInfoResponse toInfoResponse(User user){
         return new UserInfoResponse(
+                user.getName(),
                 user.getUsername(),
-                user.getHandleName(),
                 user.getCreatedAt()
         );
     }

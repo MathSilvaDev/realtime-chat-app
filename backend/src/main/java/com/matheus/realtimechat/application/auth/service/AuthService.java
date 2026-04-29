@@ -32,12 +32,17 @@ public class AuthService {
     @Transactional
     public void register(RegisterRequest request){
 
+        if (userRepository.existsByUsername(request.username().toLowerCase())) {
+            throw new IllegalStateException("Username already in use");
+        }
+
         Role roleBasic = roleRepository.findByName(RoleName.BASIC).
                 orElseThrow(() -> new IllegalStateException("Default role BASIC not found"));
 
         String hashPassword = passwordEncoder.encode(request.password());
 
-        User newUser = new User(
+        User newUser = User.create(
+                request.name(),
                 request.username(),
                 hashPassword
         );
@@ -49,9 +54,11 @@ public class AuthService {
 
     public LoginResponse login(LoginRequest request){
 
+        String username = request.username().toLowerCase();
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.username(),
+                        username,
                         request.password()
                 )
         );
@@ -59,7 +66,7 @@ public class AuthService {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         User user = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow();
+                .orElseThrow(() -> new IllegalStateException("User not found"));
 
         TokenData tokenData = jwtService.generateToken(user);
 

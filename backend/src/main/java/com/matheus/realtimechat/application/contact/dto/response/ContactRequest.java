@@ -1,5 +1,8 @@
 package com.matheus.realtimechat.application.contact.dto.response;
 
+import jakarta.validation.constraints.NotBlank;
+
 public record ContactRequest(
-        String handleName
+        @NotBlank
+        String username
 ) { }

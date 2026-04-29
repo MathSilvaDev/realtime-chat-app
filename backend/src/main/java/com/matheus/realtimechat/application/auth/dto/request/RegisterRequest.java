@@ -8,6 +8,10 @@ public record RegisterRequest(
 
         @NotBlank
         @Size(min = 3, max = ValidationConstants.USERNAME_MAX_LENGTH)
+        String name,
+
+        @NotBlank
+        @Size(min = 3, max = ValidationConstants.USERNAME_MAX_LENGTH)
         String username,
 
         @NotBlank

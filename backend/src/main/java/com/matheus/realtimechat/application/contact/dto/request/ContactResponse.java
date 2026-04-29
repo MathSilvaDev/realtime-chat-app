@@ -4,6 +4,6 @@ import java.util.UUID;
 
 public record ContactResponse(
         UUID id,
-        String handleName,
+        String name,
         String username
 ) {}

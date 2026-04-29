@@ -24,10 +24,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false, unique = true)
-    private String handleName;
-
     @Column(nullable = false, length = ValidationConstants.USERNAME_MAX_LENGTH)
+    private String name;
+
+    @Column(nullable = false, unique = true, length = ValidationConstants.USERNAME_MAX_LENGTH)
     private String username;
 
     @Column(nullable = false)
@@ -48,18 +48,21 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<UserContact> contacts = new HashSet<>();
 
-    public User(String username, String password){
+    private User(String name, String username, String password){
+        this.name = name;
         this.username = username;
-        this.password = password;
-        handleName = generateHandleName();
+        this.password = password;;
+    }
+
+    public static User create(String name, String username, String password){
+        return new User(
+                name,
+                username.toLowerCase(),
+                password
+        );
     }
 
     public void addRole(Role role){
         roles.add(role);
-    }
-
-    private String generateHandleName(){
-        return username + "#" +
-                UUID.randomUUID().toString().substring(0, 8);
     }
 }

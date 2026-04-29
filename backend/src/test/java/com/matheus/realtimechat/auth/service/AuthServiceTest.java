@@ -60,13 +60,17 @@ class AuthServiceTest {
         @Test
         void shouldRegisterWithSuccess(){
             RegisterRequest request = new RegisterRequest(
-                    "username",
+                    "name",
+                    "usernamE",
                     "rawPassword"
             );
 
             Role role = new Role(RoleName.BASIC);
 
-            when(roleRepository.findByName(role.getName()))
+            when(userRepository.existsByUsername(request.username().toLowerCase()))
+                    .thenReturn(false);
+
+            when(roleRepository.findByName(RoleName.BASIC))
                     .thenReturn(Optional.of(role));
 
             when(passwordEncoder.encode(request.password()))
@@ -75,8 +79,10 @@ class AuthServiceTest {
             authService.register(request);
 
             verify(userRepository).save(argThat(user ->
-                    user.getUsername().equals(request.username()) &&
-                    user.getPassword().equals("hashedPassword")
+                    user.getName().equals(request.name()) &&
+                            user.getUsername().equals("username") &&
+                            user.getPassword().equals("hashedPassword") &&
+                            user.getRoles().contains(role)
             ));
 
         }
@@ -92,7 +98,8 @@ class AuthServiceTest {
                     "hashPassword"
             );
 
-            User user = new User(
+            User user = User.create(
+                    "name",
                     "username",
                     "hashPassword"
             );
