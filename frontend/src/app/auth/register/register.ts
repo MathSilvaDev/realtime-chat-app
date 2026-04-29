@@ -16,6 +16,7 @@ export class Register {
     private router: Router
   ){}
 
+  name: string = "";
   username: string = "";
   password: string = "";
 
@@ -24,10 +25,11 @@ export class Register {
   }
 
   register(){
+    const name = this.replaceInput(this.name);
     const username = this.replaceInput(this.username);
     const password = this.replaceInput(this.password);
 
-    this.authService.register(username, password).subscribe({
+    this.authService.register(name, username, password).subscribe({
       next: () => {
         this.router.navigate(["/login"]);
       },

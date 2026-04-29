@@ -31,7 +31,7 @@ export class Login {
     this.authService.login(username, password).subscribe({
       next: (jwt) => {
         this.authService.setToken(jwt.token)
-        // this.router.navigate(["home"]);
+        this.router.navigate(["home"]);
       },
       error: () => {
         alert(`Error logging into account.`);

@@ -16,9 +16,9 @@ export class AuthService {
 
   private readonly API_URL = "/api/auth";
 
-  register(username: string, password: string): Observable<void>{
+  register(name: string, username: string, password: string): Observable<void>{
     return this.http.post<void>(`${this.API_URL}/register`,{
-      username, password
+      name, username, password
     });
   }
 
