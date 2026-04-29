@@ -1,4 +1,4 @@
-package com.matheus.realtimechat.application.contact.dto.request;
+package com.matheus.realtimechat.application.contact.dto.response;
 
 import java.util.UUID;
 

@@ -1,7 +1,7 @@
 package com.matheus.realtimechat.application.contact.service;
 
-import com.matheus.realtimechat.application.contact.dto.request.ContactResponse;
-import com.matheus.realtimechat.application.contact.dto.response.ContactRequest;
+import com.matheus.realtimechat.application.contact.dto.response.ContactResponse;
+import com.matheus.realtimechat.application.contact.dto.request.ContactRequest;
 import com.matheus.realtimechat.domain.user.entity.User;
 import com.matheus.realtimechat.domain.user.repository.UserRepository;
 import com.matheus.realtimechat.domain.usercontact.entity.UserContact;

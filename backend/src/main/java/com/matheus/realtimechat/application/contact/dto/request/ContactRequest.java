@@ -1,4 +1,4 @@
-package com.matheus.realtimechat.application.contact.dto.response;
+package com.matheus.realtimechat.application.contact.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 

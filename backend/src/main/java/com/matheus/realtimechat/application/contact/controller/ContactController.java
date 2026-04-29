@@ -1,7 +1,7 @@
 package com.matheus.realtimechat.application.contact.controller;
 
-import com.matheus.realtimechat.application.contact.dto.request.ContactResponse;
-import com.matheus.realtimechat.application.contact.dto.response.ContactRequest;
+import com.matheus.realtimechat.application.contact.dto.response.ContactResponse;
+import com.matheus.realtimechat.application.contact.dto.request.ContactRequest;
 import com.matheus.realtimechat.application.contact.service.ContactService;
 import com.matheus.realtimechat.common.security.AuthUtils;
 import jakarta.validation.Valid;
