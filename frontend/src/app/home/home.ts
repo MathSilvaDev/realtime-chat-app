@@ -4,10 +4,11 @@ import { HomeService } from './service/home.service';
 import { Router } from '@angular/router';
 import { ContactResponse } from './dto/response/contact-response';
 import { ContactRequest } from './dto/request/contact-request';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
-  imports: [ FormsModule],
+  imports: [ FormsModule, CommonModule],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
@@ -15,16 +16,23 @@ export class Home {
 
   contactList: ContactResponse[] = [];
 
+  messages: { content: string; sender: 'me' | 'contact' }[] = [];
+
+  selectedContact?: ContactResponse;
+
+  searchContactName: string = '';
+  newContact: string = '';
+
   constructor(
     private homeService: HomeService,
-    private router: Router
+    protected router: Router
   ){}
 
   ngOnInit(){
-    this.loadContacts();
+    this.findContacts();
   }
 
-  loadContacts(){
+  findContacts(){
     this.homeService.findContacts().subscribe({
       next: (response) => {
         this.contactList = response;
@@ -35,14 +43,14 @@ export class Home {
     });
   }
 
-  addContact(contactName: string){
-
-    const username: string = this.replaceInput(contactName);
+  addContact(){
+    const username: string = this.replaceInput(this.newContact);
     const request: ContactRequest = { username: username }
 
     this.homeService.addContact(request).subscribe({
       next: (response) => {
         this.contactList.push(response);
+        this.newContact = '';
       },
       error: (err) => {
         console.log(`ERROR: ${err}`);
@@ -50,11 +58,16 @@ export class Home {
     });
   }
 
+  loadContact(contact: ContactResponse) {
+    this.selectedContact = contact;
+    this.messages = [];
+  }
+
   searchContact(){
     //this.homeService.findContact();
   }
 
-  public removeContact(){
+  removeContact(){
     //this.homeService.removeContact();
   }
 

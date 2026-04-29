@@ -1,1 +1,81 @@
-<p>home works!</p>
+<div class="chat-container">
+  <div class="sidebar">
+
+    <div class="sidebar-header">
+      <h2>Chats</h2>
+
+      <button class="settings-btn" (click)="router.navigate(['/dashboard'])">
+        ⚙️
+      </button>
+    </div>
+
+    <div class="search-box">
+      <input
+        type="text"
+        name="search-contact"
+        placeholder="Search Contact..."
+        [(ngModel)]="searchContactName"
+        (input)="searchContact()"
+      />
+    </div>
+
+    <div class="add-contact">
+      <input 
+        type="text" 
+        name="add-contact" 
+        [(ngModel)]="newContact"
+        placeholder="New Contact..."/>
+      <button (click)="addContact();"> + </button>
+    </div>
+
+    <div class="contact-list">
+      @for (contact of contactList; track contact.username) {
+        <div
+          class="contact"
+          (click)="loadContact(contact)"
+        >
+          <div class="avatar">
+            {{ contact.username!.charAt(0)!.toUpperCase() }}
+          </div>
+
+          <div class="info">
+            <span class="name">{{ contact.name || contact.username }}</span>
+            <span class="username">@{{ contact.username }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="chat-area">
+
+    <div class="chat-header">
+      @if (selectedContact) {
+        <div class="chat-user">
+          <span class="name">{{ selectedContact.name || selectedContact.username }}</span>
+          <span class="username">@{{ selectedContact.username }}</span>
+        </div>
+      } @else {
+        <h3>Select a chat</h3>
+      }
+    </div>
+
+    <div class="messages">
+
+      @for (msg of messages; track $index) {
+        <div class="message" [ngClass]="msg.sender">
+          <div class="bubble">
+            {{ msg.content }}
+          </div>
+        </div>
+      }
+
+    </div>
+
+    <div class="chat-input">
+      <input type="text" placeholder="Type a message..." />
+      <button>➤</button>
+    </div>
+
+  </div>
+</div>

@@ -9,6 +9,7 @@ import com.matheus.realtimechat.domain.usercontact.repository.UserContactReposit
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class ContactService {
                 .toList();
     }
 
+    @Transactional
     public ContactResponse addContact(UUID userId, ContactRequest request){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -45,15 +47,20 @@ public class ContactService {
         boolean existsContact  =
                 userContactRepository.existsByUser_IdAndContact_Id(userId, contact.getId());
 
-        if(existsContact){
+        boolean existsReverse =
+                userContactRepository.existsByUser_IdAndContact_Id(contact.getId(), userId);
+
+        if (existsContact || existsReverse) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Contact already exists");
         }
 
-        UserContact userContact = new UserContact(user, contact);
+        UserContact userToContact = new UserContact(user, contact);
+        UserContact contactToUser = new UserContact(contact, user);
 
-        userContactRepository.save(userContact);
+        userContactRepository.save(userToContact);
+        userContactRepository.save(contactToUser);
 
-        return toResponse(userContact);
+        return toResponse(userToContact);
     }
 
     private ContactResponse toResponse(UserContact userContact){
