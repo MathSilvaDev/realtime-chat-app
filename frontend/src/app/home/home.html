@@ -24,7 +24,7 @@
         type="text" 
         name="add-contact" 
         [(ngModel)]="newContact"
-        placeholder="New Contact..."/>
+        placeholder="Add contact (username)..."/>
       <button (click)="addContact();"> + </button>
     </div>
 
@@ -32,7 +32,7 @@
       @for (contact of contactList; track contact.username) {
         <div
           class="contact"
-          (click)="loadContact(contact)"
+          (click)="loadMessages(contact)"
         >
           <div class="avatar">
             {{ contact.username!.charAt(0)!.toUpperCase() }}

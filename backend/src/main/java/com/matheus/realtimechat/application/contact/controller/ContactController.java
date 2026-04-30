@@ -23,10 +23,20 @@ public class ContactController {
     private final ContactService contactService;
 
     @GetMapping
-    public ResponseEntity<List<ContactResponse>> findContacts(@AuthenticationPrincipal Jwt jwt){
+    public ResponseEntity<List<ContactResponse>> findAll(@AuthenticationPrincipal Jwt jwt){
         UUID userId = AuthUtils.getUserId(jwt);
 
-        return ResponseEntity.ok(contactService.findContacts(userId));
+        return ResponseEntity.ok(contactService.findAll(userId));
+    }
+
+    @PostMapping("/find")
+    public ResponseEntity<List<ContactResponse>> findByUsername(
+            @AuthenticationPrincipal Jwt jwt, @RequestBody ContactRequest request){
+
+        UUID userId = AuthUtils.getUserId(jwt);
+
+        return ResponseEntity.ok(
+                contactService.findByUsername(userId, request));
     }
 
     @PostMapping

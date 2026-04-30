@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,9 +23,19 @@ public class ContactService {
     private final UserContactRepository userContactRepository;
     private final UserRepository userRepository;
 
-    public List<ContactResponse> findContacts(UUID userId){
+    public List<ContactResponse> findAll(UUID userId){
 
-        return userContactRepository.findByUser_Id(userId).stream()
+        return userContactRepository.findByUser_Id(userId)
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    public List<ContactResponse> findByUsername(UUID userId, ContactRequest request){
+
+        return userContactRepository
+                .findByUser_IdAndContact_UsernameContainingIgnoreCase(userId, request.username())
+                .stream()
                 .map(this::toResponse)
                 .toList();
     }
@@ -35,7 +46,7 @@ public class ContactService {
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.INTERNAL_SERVER_ERROR, "ERROR: User doesn't exists"));
 
-        User contact = userRepository.findByUsername(request.username().toLowerCase())
+        User contact = userRepository.findByUsernameIgnoreCase(request.username())
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "This contact doesn't exists"));
 

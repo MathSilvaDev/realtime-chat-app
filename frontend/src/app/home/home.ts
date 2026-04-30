@@ -58,13 +58,23 @@ export class Home {
     });
   }
 
-  loadContact(contact: ContactResponse) {
+  loadMessages(contact: ContactResponse) {
     this.selectedContact = contact;
     this.messages = [];
   }
 
   searchContact(){
-    //this.homeService.findContact();
+    const contactUsername: string = this.replaceInput(this.searchContactName);
+    const request: ContactRequest = { username: contactUsername }
+
+    this.homeService.findContact(request).subscribe({
+      next: (response) => {
+        this.contactList = response;
+      },
+      error: (err) => {
+        console.log(`ERROR: ${err}`);
+      },
+    });
   }
 
   removeContact(){

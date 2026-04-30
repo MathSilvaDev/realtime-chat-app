@@ -12,5 +12,9 @@ import java.util.UUID;
 public interface UserContactRepository extends JpaRepository<UserContact, UserContactId> {
 
     List<UserContact> findByUser_Id(UUID userId);
+
+    List<UserContact> findByUser_IdAndContact_UsernameContainingIgnoreCase
+            (UUID userId, String username);
+
     boolean existsByUser_IdAndContact_Id(UUID userId, UUID contactId);
 }

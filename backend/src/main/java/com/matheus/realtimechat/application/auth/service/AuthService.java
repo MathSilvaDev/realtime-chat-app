@@ -32,7 +32,7 @@ public class AuthService {
     @Transactional
     public void register(RegisterRequest request){
 
-        if (userRepository.existsByUsername(request.username().toLowerCase())) {
+        if (userRepository.existsByUsernameIgnoreCase(request.username())) {
             throw new IllegalStateException("Username already in use");
         }
 
@@ -54,18 +54,16 @@ public class AuthService {
 
     public LoginResponse login(LoginRequest request){
 
-        String username = request.username().toLowerCase();
-
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        username,
+                        request.username().toLowerCase(),
                         request.password()
                 )
         );
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        User user = userRepository.findByUsername(userDetails.getUsername())
+        User user = userRepository.findByUsernameIgnoreCase(userDetails.getUsername())
                 .orElseThrow(() -> new IllegalStateException("User not found"));
 
         TokenData tokenData = jwtService.generateToken(user);

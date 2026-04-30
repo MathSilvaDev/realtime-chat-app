@@ -61,13 +61,13 @@ class AuthServiceTest {
         void shouldRegisterWithSuccess(){
             RegisterRequest request = new RegisterRequest(
                     "name",
-                    "usernamE",
+                    "username",
                     "rawPassword"
             );
 
             Role role = new Role(RoleName.BASIC);
 
-            when(userRepository.existsByUsername(request.username().toLowerCase()))
+            when(userRepository.existsByUsernameIgnoreCase(request.username()))
                     .thenReturn(false);
 
             when(roleRepository.findByName(RoleName.BASIC))
@@ -116,7 +116,7 @@ class AuthServiceTest {
             when(authenticationManager.authenticate(any()))
                     .thenReturn(authentication);
 
-            when(userRepository.findByUsername(user.getUsername()))
+            when(userRepository.findByUsernameIgnoreCase(user.getUsername()))
                     .thenReturn(Optional.of(user));
 
             when(jwtService.generateToken(user))

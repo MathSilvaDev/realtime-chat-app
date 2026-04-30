@@ -23,7 +23,9 @@ export class HomeService {
     return this.http.get<ContactResponse[]>(this.API_URL_CONTACTS);
   }
 
-  public findContact(){}
+  public findContact(contactRequest: ContactRequest): Observable<ContactResponse[]>{
+    return this.http.post<ContactResponse[]>(`${this.API_URL_CONTACTS}/find`, {...contactRequest});
+  }
 
   public addContact(contactRequest: ContactRequest): Observable<ContactResponse> {
     return this.http.post<ContactResponse>(this.API_URL_CONTACTS, {...contactRequest} );

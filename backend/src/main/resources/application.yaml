@@ -3,7 +3,9 @@ spring:
     name: realtimechat
 
   datasource:
-    url: jdbc:h2:mem:testdb
+#    url: jdbc:h2:mem:testdb
+#    temporary in-file database for testing
+    url: jdbc:h2:file:./data/realtimechat
     driver-class-name: org.h2.Driver
     username: sa
     password:
