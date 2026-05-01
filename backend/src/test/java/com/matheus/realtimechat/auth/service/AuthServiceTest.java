@@ -120,7 +120,7 @@ class AuthServiceTest {
                     .thenReturn(Optional.of(user));
 
             when(jwtService.generateToken(user))
-                    .thenReturn(new TokenData("token-test", 300L));
+                    .thenReturn(new TokenData("token-test", 300L, user.getId()));
 
             LoginResponse response = authService.login(request);
 

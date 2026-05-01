@@ -31,6 +31,8 @@ export class HomeService {
     return this.http.post<ContactResponse>(this.API_URL_CONTACTS, {...contactRequest} );
   }
 
+  public loadMessages(){}
+
   public removeContact(){}
 
 }

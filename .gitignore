@@ -36,6 +36,8 @@ Thumbs.db
 **/target/
 **/build/
 out/
+/backend/data/
+*.mv.db
 
 # Logs
 *.log
