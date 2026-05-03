@@ -5,10 +5,11 @@ import { Router } from '@angular/router';
 import { ContactResponse } from './dto/response/contact-response';
 import { ContactRequest } from './dto/request/contact-request';
 import { CommonModule } from '@angular/common';
+import { ChatService } from './service/chat.service';
 
 @Component({
   selector: 'app-home',
-  imports: [ FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
@@ -23,10 +24,13 @@ export class Home {
   searchContactName: string = '';
   newContact: string = '';
 
+  messageInput: string = '';
+
   constructor(
     private homeService: HomeService,
+    private chatService: ChatService,
     protected router: Router
-  ){}
+  ) {}
 
   ngOnInit(){
     this.findContacts();
@@ -61,6 +65,29 @@ export class Home {
   loadMessages(contact: ContactResponse) {
     this.selectedContact = contact;
     this.messages = [];
+
+    const chatId = contact.id;
+
+    this.chatService.connect(chatId, (msg) => {
+      this.messages.push({
+        content: msg.message,
+        sender: 'contact'
+      });
+    });
+  }
+  sendMessage() {
+    if (!this.selectedContact || !this.messageInput.trim()) return;
+
+    const chatId = this.selectedContact.id;
+
+    this.chatService.send(chatId, this.messageInput);
+
+    this.messages.push({
+      content: this.messageInput,
+      sender: 'me'
+    });
+
+    this.messageInput = '';
   }
 
   searchContact(){
@@ -77,12 +104,7 @@ export class Home {
     });
   }
 
-  removeContact(){
-    //this.homeService.removeContact();
-  }
-
   replaceInput(str: string): string{
     return str.trim();
   }
-
 }

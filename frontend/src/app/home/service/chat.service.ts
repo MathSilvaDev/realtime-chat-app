@@ -24,12 +24,12 @@ export class ChatService {
       connectHeaders: {
         Authorization: `Bearer ${token}`
       },
-      reconnectDelay: 5000 // reconecta automático
+      reconnectDelay: 5000
     });
 
     this.stompClient.onConnect = () => {
 
-      console.log("✅ WebSocket conectado");
+      console.log("Connected");
 
       this.stompClient.subscribe(`/topic/chat/${chatId}`, message => {
         onMessage(JSON.parse(message.body));
@@ -46,7 +46,7 @@ export class ChatService {
   send(chatId: string, message: string) {
 
     if (!this.stompClient || !this.stompClient.connected) {
-      console.error("❌ WebSocket não conectado");
+      console.error("Disconnected");
       return;
     }
 
