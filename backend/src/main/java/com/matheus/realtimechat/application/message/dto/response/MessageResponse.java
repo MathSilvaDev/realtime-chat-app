@@ -1,5 +1,8 @@
 package com.matheus.realtimechat.application.message.dto.response;
 
+import java.util.UUID;
+
 public record MessageResponse(
-        String message
-) { }
+        String content,
+        UUID senderId
+) {}

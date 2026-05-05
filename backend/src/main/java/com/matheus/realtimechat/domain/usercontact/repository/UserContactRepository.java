@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -15,6 +16,8 @@ public interface UserContactRepository extends JpaRepository<UserContact, UserCo
 
     List<UserContact> findByUser_IdAndContact_UsernameContainingIgnoreCase
             (UUID userId, String username);
+
+    Optional<UserContact> findByUser_IdAndContact_Id(UUID userId, UUID contactId);
 
     boolean existsByUser_IdAndContact_Id(UUID userId, UUID contactId);
 }

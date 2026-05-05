@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,11 +43,11 @@ public class ContactService {
     public ContactResponse addContact(UUID userId, ContactRequest request){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.INTERNAL_SERVER_ERROR, "ERROR: User doesn't exists"));
+                        HttpStatus.INTERNAL_SERVER_ERROR, "ERROR: User doesn't exist"));
 
         User contact = userRepository.findByUsernameIgnoreCase(request.username())
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "This contact doesn't exists"));
+                        HttpStatus.NOT_FOUND, "This contact doesn't exist"));
 
         if(user.getId().equals(contact.getId())){
             throw new ResponseStatusException(

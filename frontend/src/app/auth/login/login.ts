@@ -21,7 +21,7 @@ export class Login {
   password: string = "";
 
   ngOnInit(){
-    this.authService.removeToken();
+    this.authService.logout();
   }
 
   login(){
@@ -30,7 +30,8 @@ export class Login {
 
     this.authService.login(username, password).subscribe({
       next: (jwt) => {
-        this.authService.setToken(jwt.token)
+        this.authService.setToken(jwt.token);
+        this.authService.setUserId(jwt.userId);
         this.router.navigate(["home"]);
       },
       error: () => {

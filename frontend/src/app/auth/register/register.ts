@@ -21,7 +21,7 @@ export class Register {
   password: string = "";
 
   ngOnInit(){
-    this.authService.removeToken();
+    this.authService.logout();
   }
 
   register(){

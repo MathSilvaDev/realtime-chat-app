@@ -68,6 +68,6 @@ public class AuthService {
 
         TokenData tokenData = jwtService.generateToken(user);
 
-        return new LoginResponse(tokenData.token(), tokenData.expiresAt());
+        return new LoginResponse(tokenData.token(), tokenData.expiresAt(), user.getId());
     }
 }

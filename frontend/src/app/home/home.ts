@@ -3,7 +3,6 @@ import { FormsModule } from '@angular/forms';
 import { HomeService } from './service/home.service';
 import { Router } from '@angular/router';
 import { ContactResponse } from './dto/response/contact-response';
-import { ContactRequest } from './dto/request/contact-request';
 import { CommonModule } from '@angular/common';
 import { ChatService } from './service/chat.service';
 
@@ -41,24 +40,19 @@ export class Home {
       next: (response) => {
         this.contactList = response;
       },
-      error: (err) => {
-        console.log(`ERROR: ${err}`);
-      },
+      error: (err) => console.log(err),
     });
   }
 
   addContact(){
-    const username: string = this.replaceInput(this.newContact);
-    const request: ContactRequest = { username: username }
+    const username = this.replaceInput(this.newContact);
 
-    this.homeService.addContact(request).subscribe({
+    this.homeService.addContact({ username }).subscribe({
       next: (response) => {
         this.contactList.push(response);
         this.newContact = '';
       },
-      error: (err) => {
-        console.log(`ERROR: ${err}`);
-      },
+      error: (err) => console.log(err),
     });
   }
 
@@ -66,45 +60,43 @@ export class Home {
     this.selectedContact = contact;
     this.messages = [];
 
-    const chatId = contact.id;
+    const myId = localStorage.getItem("userId");
+    if (!myId) return;
+
+    const chatId = this.getChatId(myId, contact.id);
 
     this.chatService.connect(chatId, (msg) => {
+
       this.messages.push({
-        content: msg.message,
-        sender: 'contact'
+        content: msg.content,
+        sender: msg.senderId === myId ? 'me' : 'contact'
       });
+
     });
   }
+
   sendMessage() {
     if (!this.selectedContact || !this.messageInput.trim()) return;
 
-    const chatId = this.selectedContact.id;
-
-    this.chatService.send(chatId, this.messageInput);
-
-    this.messages.push({
-      content: this.messageInput,
-      sender: 'me'
-    });
+    this.chatService.send(this.selectedContact.id, this.messageInput);
 
     this.messageInput = '';
   }
 
   searchContact(){
-    const contactUsername: string = this.replaceInput(this.searchContactName);
-    const request: ContactRequest = { username: contactUsername }
+    const username = this.replaceInput(this.searchContactName);
 
-    this.homeService.findContact(request).subscribe({
-      next: (response) => {
-        this.contactList = response;
-      },
-      error: (err) => {
-        console.log(`ERROR: ${err}`);
-      },
+    this.homeService.findContact({ username }).subscribe({
+      next: (response) => this.contactList = response,
+      error: (err) => console.log(err),
     });
   }
 
   replaceInput(str: string): string{
     return str.trim();
+  }
+
+  private getChatId(firstUserId: string, secondUserId: string): string {
+    return [firstUserId, secondUserId].sort().join('_');
   }
 }

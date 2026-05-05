@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LoginResponseJwt } from '../dto/login-response-jwt';
 import { Router } from '@angular/router';
+import { ChatService } from '../../home/service/chat.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,8 @@ export class AuthService {
   
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private chatService: ChatService
   ){}
 
   private readonly API_URL = "/api/auth";
@@ -32,12 +34,17 @@ export class AuthService {
     localStorage.setItem("token", token);
   }
 
+  setUserId(userId: string){
+    localStorage.setItem("userId", userId);
+  }
+
   removeToken(){
     localStorage.removeItem('token');
   }
 
   logout(){
-    localStorage.clear()
-    this.router.navigate(["/login"])
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    this.chatService.disconnect();
   }
 }

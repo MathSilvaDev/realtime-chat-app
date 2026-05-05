@@ -17,21 +17,21 @@ import java.util.List;
 public class WebSocketAuthInterceptor implements ChannelInterceptor {
 
     private final JwtService jwtService;
+    private final WebSocketSessionRegistry sessionRegistry;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
 
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
+        String sessionId = accessor.getSessionId();
 
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
 
-            String authHeader = accessor.getFirstNativeHeader("Authorization");
+            String token = resolveToken(accessor);
 
-            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                throw new RuntimeException("Token ausente ou inválido");
+            if (token == null) {
+                throw new RuntimeException("Token Notfound");
             }
-
-            String token = authHeader.substring(7);
 
             TokenData tokenData = jwtService.validateToken(token);
 
@@ -42,9 +42,33 @@ public class WebSocketAuthInterceptor implements ChannelInterceptor {
                             List.of()
                     );
 
+            if (sessionId != null) {
+                sessionRegistry.register(sessionId, authentication);
+            }
+
             accessor.setUser(authentication);
+        } else if (StompCommand.DISCONNECT.equals(accessor.getCommand())) {
+            if (sessionId != null) {
+                sessionRegistry.remove(sessionId);
+            }
+        } else if (sessionId != null && accessor.getUser() == null) {
+            accessor.setUser(sessionRegistry.getAuthentication(sessionId));
         }
 
         return message;
+    }
+
+    private String resolveToken(StompHeaderAccessor accessor) {
+        String authorization = accessor.getFirstNativeHeader("Authorization");
+
+        if (authorization != null && authorization.startsWith("Bearer ")) {
+            return authorization.substring(7);
+        }
+
+        if (accessor.getSessionAttributes() == null) {
+            return null;
+        }
+
+        return (String) accessor.getSessionAttributes().get("token");
     }
 }

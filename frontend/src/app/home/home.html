@@ -1,18 +1,15 @@
 <div class="chat-container">
+
   <div class="sidebar">
 
     <div class="sidebar-header">
       <h2>Chats</h2>
-
-      <button class="settings-btn" (click)="router.navigate(['/dashboard'])">
-        ⚙️
-      </button>
+      <button class="settings-btn" (click)="router.navigate(['/dashboard'])">⚙️</button>
     </div>
 
     <div class="search-box">
       <input
         type="text"
-        name="search-contact"
         placeholder="Search Contact..."
         [(ngModel)]="searchContactName"
         (input)="searchContact()"
@@ -21,21 +18,18 @@
 
     <div class="add-contact">
       <input 
-        type="text" 
-        name="add-contact" 
+        type="text"
         [(ngModel)]="newContact"
-        placeholder="Add contact (username)..."/>
-      <button (click)="addContact();"> + </button>
+        placeholder="Add contact..."
+      />
+      <button (click)="addContact()">+</button>
     </div>
 
     <div class="contact-list">
       @for (contact of contactList; track contact.username) {
-        <div
-          class="contact"
-          (click)="loadMessages(contact)"
-        >
+        <div class="contact" (click)="loadMessages(contact)">
           <div class="avatar">
-            {{ contact.username!.charAt(0)!.toUpperCase() }}
+            {{ contact.username!.charAt(0).toUpperCase() }}
           </div>
 
           <div class="info">
@@ -45,6 +39,7 @@
         </div>
       }
     </div>
+
   </div>
 
   <div class="chat-area">
@@ -74,12 +69,12 @@
 
     <div class="chat-input">
       <input 
-        type="text" 
+        type="text"
         placeholder="Type a message..."
         [(ngModel)]="messageInput"
         (keyup.enter)="sendMessage()"
       />
-      <button>➤</button>
+      <button (click)="sendMessage()">➤</button>
     </div>
 
   </div>

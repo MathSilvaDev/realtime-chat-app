@@ -17,10 +17,8 @@ export class ChatService {
 
     const token = localStorage.getItem("token");
 
-    const socket = new SockJS('http://localhost:8080/ws');
-
     this.stompClient = new Client({
-      webSocketFactory: () => socket,
+      brokerURL: 'ws://localhost:8080/ws',
       connectHeaders: {
         Authorization: `Bearer ${token}`
       },
@@ -37,7 +35,7 @@ export class ChatService {
     };
 
     this.stompClient.onStompError = (frame) => {
-      console.error("Erro STOMP:", frame);
+      console.error("STOMP error:", frame);
     };
 
     this.stompClient.activate();

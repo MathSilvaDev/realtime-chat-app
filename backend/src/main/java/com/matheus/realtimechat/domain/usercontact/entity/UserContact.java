@@ -1,5 +1,6 @@
 package com.matheus.realtimechat.domain.usercontact.entity;
 
+import com.matheus.realtimechat.domain.message.entity.Message;
 import com.matheus.realtimechat.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -8,6 +9,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "user_contact")
@@ -25,6 +28,9 @@ public class UserContact {
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("contactId")
     private User contact;
+
+    @OneToMany(mappedBy = "userContact", fetch = FetchType.LAZY)
+    private List<Message> messages = new ArrayList<>();
 
     @CreationTimestamp
     @Column(updatable = false)
