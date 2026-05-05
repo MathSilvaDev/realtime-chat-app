@@ -9,6 +9,7 @@ import com.matheus.realtimechat.domain.usercontact.repository.UserContactReposit
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
@@ -20,6 +21,7 @@ public class MessageService {
     private final MessageRepository messageRepository;
     private final UserContactRepository userContactRepository;
 
+    @Transactional
     public MessageResponse sendMessage(UUID userId, MessageRequest request){
         UserContact userContact = userContactRepository
                 .findByUser_IdAndContact_Id(userId, request.contactId())
@@ -36,7 +38,9 @@ public class MessageService {
     private MessageResponse toResponse(Message message){
         return new MessageResponse(
                 message.getContent(),
-                message.getUserContact().getUser().getId()
+                message.getUserContact().getUser().getId(),
+                message.getUserContact().getUser().getUsername(),
+                message.getCreatedAt()
         );
     }
 }

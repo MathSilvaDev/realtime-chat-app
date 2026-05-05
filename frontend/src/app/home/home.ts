@@ -16,7 +16,12 @@ export class Home {
 
   contactList: ContactResponse[] = [];
 
-  messages: { content: string; sender: 'me' | 'contact' }[] = [];
+  messages: {
+    content: string;
+    sender: 'me' | 'contact';
+    senderUsername: string;
+    createdAt: string;
+  }[] = [];
 
   selectedContact?: ContactResponse;
 
@@ -69,7 +74,9 @@ export class Home {
 
       this.messages.push({
         content: msg.content,
-        sender: msg.senderId === myId ? 'me' : 'contact'
+        sender: msg.senderId === myId ? 'me' : 'contact',
+        senderUsername: msg.senderUsername,
+        createdAt: msg.createdAt
       });
 
     });
@@ -94,6 +101,21 @@ export class Home {
 
   replaceInput(str: string): string{
     return str.trim();
+  }
+
+  canSendMessage(): boolean {
+    return !!this.selectedContact && !!this.messageInput.trim();
+  }
+
+  formatMessageDate(createdAt: string): string {
+    if (!createdAt) return '';
+
+    return new Intl.DateTimeFormat('en', {
+      month: 'short',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
+    }).format(new Date(createdAt));
   }
 
   private getChatId(firstUserId: string, secondUserId: string): string {

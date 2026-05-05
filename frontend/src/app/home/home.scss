@@ -240,23 +240,26 @@
   border: 1px solid #cfc9ff;
 }
 
-.message.me .bubble::before,
-.message.contact .bubble::before {
-  display: inline-block;
-  margin-right: 8px;
+.message-meta {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  margin-bottom: 4px;
   font-size: 11px;
+  line-height: 1.2;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0;
 }
 
-.message.me .bubble::before {
-  content: "You";
+.message-meta time {
+  color: #7a8192;
+  font-weight: 600;
+}
+
+.message.me .message-meta span {
   color: #6157e8;
 }
 
-.message.contact .bubble::before {
-  content: "Contact";
+.message.contact .message-meta span {
   color: #647084;
 }
 
@@ -292,6 +295,12 @@
   box-shadow: 0 0 0 3px rgba(97, 87, 232, 0.14);
 }
 
+.chat-input input:disabled {
+  background: #f3f5f8;
+  color: #9aa2b1;
+  cursor: not-allowed;
+}
+
 .chat-input button {
   width: 42px;
   height: 42px;
@@ -309,6 +318,15 @@
 .chat-input button:hover {
   background: #5148cc;
   transform: translateY(-1px);
+}
+
+.chat-input.disabled button,
+.chat-input button:disabled {
+  background: #c8ced8;
+  color: #ffffff;
+  cursor: not-allowed;
+  pointer-events: none;
+  transform: none;
 }
 
 @keyframes message-in {

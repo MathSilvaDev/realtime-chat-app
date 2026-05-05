@@ -60,6 +60,10 @@
       @for (msg of messages; track $index) {
         <div class="message" [ngClass]="msg.sender">
           <div class="bubble">
+            <div class="message-meta">
+              <span>@{{ msg.senderUsername }}</span>
+              <time>{{ formatMessageDate(msg.createdAt) }}</time>
+            </div>
             {{ msg.content }}
           </div>
         </div>
@@ -67,12 +71,13 @@
 
     </div>
 
-    <div class="chat-input">
+    <div class="chat-input" [class.disabled]="!canSendMessage()">
       <input 
         type="text"
         placeholder="Type a message..."
         [(ngModel)]="messageInput"
         (keyup.enter)="sendMessage()"
+        [disabled]="!selectedContact"
       />
       <button (click)="sendMessage()">➤</button>
     </div>
