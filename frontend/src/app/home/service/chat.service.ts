@@ -1,13 +1,19 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Client } from '@stomp/stompjs';
+import { Observable } from 'rxjs';
 import SockJS from 'sockjs-client';
+import { MessageResponse } from '../dto/response/message-response';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
 
+  private readonly API_URL = "/api/me/messages";
   private stompClient!: Client;
+
+  constructor(private http: HttpClient){}
 
   connect(chatId: string, onMessage: (msg: any) => void) {
 
@@ -16,12 +22,11 @@ export class ChatService {
     }
 
     const token = localStorage.getItem("token");
+    const host = window.location.hostname;
+    const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
 
     this.stompClient = new Client({
-      brokerURL: 'ws://localhost:8080/ws',
-      connectHeaders: {
-        Authorization: `Bearer ${token}`
-      },
+      brokerURL: `${protocol}://${host}:8080/ws?token=${token}`,
       reconnectDelay: 5000
     });
 
@@ -41,7 +46,7 @@ export class ChatService {
     this.stompClient.activate();
   }
 
-  send(chatId: string, message: string) {
+  send(chatId: string, message: string){
 
     if (!this.stompClient || !this.stompClient.connected) {
       console.error("Disconnected");
@@ -57,9 +62,13 @@ export class ChatService {
     });
   }
 
-  disconnect() {
+  disconnect(){
     if (this.stompClient) {
       this.stompClient.deactivate();
     }
+  }
+
+  loadMessages(contactId: string): Observable<MessageResponse[]>{
+    return this.http.get<MessageResponse[]>(`${this.API_URL}/${contactId}`)
   }
 }

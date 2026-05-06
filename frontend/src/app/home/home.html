@@ -27,7 +27,7 @@
 
     <div class="contact-list">
       @for (contact of contactList; track contact.username) {
-        <div class="contact" (click)="loadMessages(contact)">
+        <div class="contact" (click)="connectContact(contact)">
           <div class="avatar">
             {{ contact.username!.charAt(0).toUpperCase() }}
           </div>

@@ -179,7 +179,6 @@
   flex-direction: column;
   gap: 6px;
   width: 100%;
-  max-width: 920px;
   margin: 0;
   box-sizing: border-box;
   scroll-behavior: smooth;
@@ -281,7 +280,7 @@
 
 .chat-input input {
   flex: 1;
-  max-width: 858px;
+  max-width: none;
   margin-left: 0;
   padding: 11px 14px;
   border-radius: 999px;

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ContactResponse } from './dto/response/contact-response';
 import { CommonModule } from '@angular/common';
 import { ChatService } from './service/chat.service';
+import { MessageResponse } from './dto/response/message-response';
 
 @Component({
   selector: 'app-home',
@@ -16,12 +17,7 @@ export class Home {
 
   contactList: ContactResponse[] = [];
 
-  messages: {
-    content: string;
-    sender: 'me' | 'contact';
-    senderUsername: string;
-    createdAt: string;
-  }[] = [];
+  messages: MessageResponse[] = [];
 
   selectedContact?: ContactResponse;
 
@@ -61,7 +57,7 @@ export class Home {
     });
   }
 
-  loadMessages(contact: ContactResponse) {
+  connectContact(contact: ContactResponse) {
     this.selectedContact = contact;
     this.messages = [];
 
@@ -69,6 +65,8 @@ export class Home {
     if (!myId) return;
 
     const chatId = this.getChatId(myId, contact.id);
+
+    this.loadMessages(contact.id);
 
     this.chatService.connect(chatId, (msg) => {
 
@@ -79,6 +77,19 @@ export class Home {
         createdAt: msg.createdAt
       });
 
+    });
+  }
+
+  loadMessages(contactId: string){
+    this.chatService.loadMessages(contactId).subscribe({
+      next: (value) => {
+        const myId = localStorage.getItem("userId");
+
+        this.messages = value.map((msg: any) => ({
+          ...msg,
+          sender: msg.senderId === myId ? "me" : "contact"
+        }));
+      }
     });
   }
 

@@ -29,7 +29,8 @@ public class MessageWebSocketController {
                             @Header("simpSessionId") String sessionId,
                             @Valid MessageRequest request){
 
-        UsernamePasswordAuthenticationToken authentication = resolveAuthentication(principal, sessionId);
+        UsernamePasswordAuthenticationToken authentication =
+                resolveAuthentication(principal, sessionId);
 
         if (authentication == null) {
             throw new RuntimeException("User Not Found");
@@ -47,7 +48,8 @@ public class MessageWebSocketController {
         );
     }
 
-    private UsernamePasswordAuthenticationToken resolveAuthentication(Principal principal, String sessionId) {
+    private UsernamePasswordAuthenticationToken resolveAuthentication(Principal principal,
+                                                                      String sessionId) {
         if (principal instanceof UsernamePasswordAuthenticationToken authentication) {
             return authentication;
         }
