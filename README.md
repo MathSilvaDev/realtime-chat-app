@@ -4,6 +4,8 @@ Realtime Chat is a full-stack messaging application built with Angular and Sprin
 
 This project was built as a practical portfolio application to demonstrate full-stack development, authentication, REST APIs, and real-time communication.
 
+Live deployment: https://realtime-chat-app-rpzg.onrender.com/
+
 ## Screenshots
 
 ![Register screen](docs/screenshots/register.png)
@@ -20,6 +22,7 @@ This project was built as a practical portfolio application to demonstrate full-
 - Real-time messaging with WebSocket/STOMP
 - Message history between users
 - H2 database for local development
+- PostgreSQL 17 cloud database for production deployment
 - Basic backend tests for authentication
 
 ## Tech Stack
@@ -39,7 +42,8 @@ This project was built as a practical portfolio application to demonstrate full-
 - Spring Security
 - Spring Data JPA
 - WebSocket/STOMP
-- H2 Database
+- H2 Database for local development
+- PostgreSQL 17 on Neon for cloud deployment
 - Maven
 
 ## Project Structure
@@ -93,6 +97,16 @@ http://localhost:8080
 
 The local H2 database is stored at `backend/data/realtimechat`. Data persists between backend restarts on your machine, but the `backend/data` folder is ignored by git, so each new clone starts with a fresh local database.
 
+The datasource can be overridden with environment variables for production:
+
+```env
+SPRING_DATASOURCE_URL=jdbc:postgresql://host/database?sslmode=require
+SPRING_DATASOURCE_USERNAME=database_user
+SPRING_DATASOURCE_PASSWORD=database_password
+SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.PostgreSQLDialect
+```
+
 ### Frontend
 
 ```bash
@@ -108,6 +122,37 @@ http://localhost:4200
 ```
 
 Angular is configured to proxy `/api` requests to the backend at `http://localhost:8080`.
+
+The Angular production build is configured to output into `backend/src/main/resources/static`, so the Spring Boot application can serve the frontend and backend from the same deployment.
+
+## Deployment
+
+The application is deployed on Render using Docker:
+
+- Frontend: Angular production build served by Spring Boot static resources
+- Backend: Spring Boot running in a Docker container
+- Database: Neon PostgreSQL 17
+- Live URL: https://realtime-chat-app-rpzg.onrender.com/
+
+Required production environment variables:
+
+```env
+PORT=8080
+SPRING_DATASOURCE_URL=jdbc:postgresql://host/database?sslmode=require
+SPRING_DATASOURCE_USERNAME=database_user
+SPRING_DATASOURCE_PASSWORD=database_password
+SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.PostgreSQLDialect
+SPRING_SECURITY_JWT_PRIVATE_KEY=file:/etc/secrets/jwt-private.key
+SPRING_SECURITY_JWT_PUBLIC_KEY=file:/etc/secrets/jwt-public.key
+```
+
+The JWT private and public keys are provided as Render Secret Files:
+
+```text
+jwt-private.key
+jwt-public.key
+```
 
 ## API Overview
 
