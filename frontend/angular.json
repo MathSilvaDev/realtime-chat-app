@@ -22,6 +22,10 @@
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
+            "outputPath": {
+              "base": "../backend/src/main/resources/static",
+              "browser": ""
+            },
             "inlineStyleLanguage": "scss",
             "assets": [
               {

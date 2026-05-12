@@ -37,9 +37,20 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
                         .requestMatchers("/ws/**").permitAll()
+                        .requestMatchers(
+                                "/",
+                                "/index.html",
+                                "/favicon.ico",
+                                "/*.js",
+                                "/*.css",
+                                "/*.json",
+                                "/assets/**"
+                        ).permitAll()
                         .requestMatchers("/api/me/**").authenticated()
                         .requestMatchers("/api/me/contacts/**").authenticated()
                         .requestMatchers("/api/me/messages/**").authenticated()
+                        .requestMatchers("/h2-console/**").hasRole("ADMIN")
+                        .requestMatchers("/api/**").hasRole("ADMIN")
                         .anyRequest().hasRole("ADMIN")
                 );
 

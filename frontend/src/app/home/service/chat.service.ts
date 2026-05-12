@@ -22,11 +22,11 @@ export class ChatService {
     }
 
     const token = localStorage.getItem("token");
-    const host = window.location.hostname;
+    const host = window.location.host;
     const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
 
     this.stompClient = new Client({
-      brokerURL: `${protocol}://${host}:8080/ws?token=${token}`,
+      brokerURL: `${protocol}://${host}/ws?token=${token}`,
       reconnectDelay: 5000
     });
 
