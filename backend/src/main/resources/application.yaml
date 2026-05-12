@@ -4,9 +4,9 @@ spring:
 
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:h2:file:./data/realtimechat}
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER_CLASS_NAME:org.h2.Driver}
+    username: ${SPRING_DATASOURCE_USERNAME:sa}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
 
   h2:
     console:
@@ -14,7 +14,7 @@ spring:
       path: /h2-console
 
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: ${SPRING_JPA_DATABASE_PLATFORM:org.hibernate.dialect.H2Dialect}
     hibernate:
       ddl-auto: update
     show-sql: true
